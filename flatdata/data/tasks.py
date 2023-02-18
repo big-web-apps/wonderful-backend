@@ -35,7 +35,7 @@ def get_flats_from_api(url):
                     'meter_price': obj['METER_PRICE'],
                     'price': obj['FULL_PRICE'],
                     'sale_price': obj['SALE_PRICE'],
-                    'url': settings.BASE_FLAT_API + obj['DETAIL_PAGE_URL'],
+                    'url': settings.BASE_FLAT_API + obj['DETAIL_PAGE_URL'][1:],
                     'image': django_file,
                     'square': obj['SQUARE'][0],
                     'living_square': obj['LIVING'][0]
