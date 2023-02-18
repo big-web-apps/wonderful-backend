@@ -14,6 +14,6 @@ app.conf.timezone = TIME_ZONE
 app.conf.beat_schedule = {
     'update_coefficient': {
         'task': 'data.tasks.update_coefficient',
-        'schedule': crontab(minute=0, hour=0)
+        'schedule': crontab(minute=0, hour=23)
     }
 }

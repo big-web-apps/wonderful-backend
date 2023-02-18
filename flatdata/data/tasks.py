@@ -11,7 +11,13 @@ from .serializers import FlatSerializer
 @app.task
 def update_coefficients():
     for obj in FlatRepository.get_queryset():
-        response = requests.post(settings.ANALYTIC_SYSTEM_URL, data=FlatSerializer(data=obj).data)
+        data = {
+            'rooms': obj.rooms,
+            'square': obj.square,
+            'floor': obj.floor,
+            'price': obj.meter_price
+        }
+        response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
         obj.coefficient = response.json()['coefficient']
         obj.save(updated_fields=['coefficient'])
 
