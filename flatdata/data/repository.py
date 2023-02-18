@@ -57,3 +57,7 @@ class FlatRepository:
     @staticmethod
     def insert(data: Dict):
         Flat.objects.create(**data)
+
+    @staticmethod
+    def get_all_regions():
+        return list(map(lambda x: x.get('districts'), list(Flat.objects.values('districts').distinct().values())))
