@@ -40,7 +40,8 @@ class GetApiFlatsApiView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        get_flats_from_api.apply_async((request.data['url'],))
+        # get_flats_from_api.apply_async((request.data['url'],))
+        get_flats_from_api(request.data['url'])
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -48,7 +49,8 @@ class GetApiApartmentsComplexesApiView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        get_apartment_complexes_from_api.apply_async((request.data['url'],))
+        # get_apartment_complexes_from_api.apply_async((request.data['url'],))
+        get_apartment_complexes_from_api(request.data['url'])
         return Response(status=status.HTTP_201_CREATED)
 
 

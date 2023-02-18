@@ -8,7 +8,7 @@ from .repository import ApartmentComplexRepository, FlatRepository
 from .serializers import FlatSerializer
 
 
-@app.task
+# @app.task
 def update_coefficients():
     for obj in FlatRepository.get_queryset():
         response = requests.post(settings.ANALYTIC_SYSTEM_URL, data=FlatSerializer(data=obj).data)
@@ -16,7 +16,7 @@ def update_coefficients():
         obj.save(updated_fields=['coefficient'])
 
 
-@app.task
+# @app.task
 def get_flats_from_api(url):
     data = requests.get(url).json()
     for obj in data['data']['ITEMS']:
