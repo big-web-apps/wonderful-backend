@@ -34,17 +34,8 @@ class FlatRepository:
                                    list(ApartmentComplex.objects.values('class_type').distinct().values()))),
             'price': [Flat.objects.aggregate(Min('price'))['price__min'], Flat.objects.aggregate(Max('price'))['price__max'] + 1]
         }
-        print(list(Flat.objects.values('apartment_complex__class_type').values()))
         for param in query_filters:
             filters[param] = query_filters[param]
-        print(Flat.objects.filter(
-            square__range=filters['square'],
-            floor__range=filters['floor'],
-            rooms__range=filters['rooms'],
-            price__range=filters['price'],
-            districts__in=filters['districts'],
-            apartment_complex__class_type__in=filters['class_type']
-        ))
         return Flat.objects.filter(
             square__range=filters['square'],
             floor__range=filters['floor'],
@@ -60,4 +51,4 @@ class FlatRepository:
 
     @staticmethod
     def get_all_regions():
-        return list(map(lambda x: x.get('districts'), list(Flat.objects.values('districts').distinct().values())))
+        return list(map(lambda x:x.get('districts'), list(Flat.objects.values('districts').distinct())))
