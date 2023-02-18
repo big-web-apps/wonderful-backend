@@ -16,7 +16,7 @@ def update_coefficients():
         obj.save(updated_fields=['coefficient'])
 
 
-# @app.task
+@app.task
 def get_flats_from_api(url):
     data = requests.get(url).json()
     for obj in data['data']['ITEMS']:
@@ -42,7 +42,7 @@ def get_flats_from_api(url):
                 })
 
 
-# @app.task
+@app.task
 def get_apartment_complexes_from_api(url: str):
     data = requests.get(url).json()
     for obj in data['filters']['items']:
