@@ -9,7 +9,7 @@ class ApartmentComplex(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     class_type = models.CharField(max_length=16)
-    image = models.ImageField(upload_to='images/complexes')
+    image = models.ImageField(upload_to='images/complexes/')
 
 
 class Flat(models.Model):
