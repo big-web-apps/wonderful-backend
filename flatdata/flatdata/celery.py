@@ -12,6 +12,8 @@ app.autodiscover_tasks()
 
 app.conf.timezone = TIME_ZONE
 app.conf.beat_schedule = {
-    'task': 'update_coefficient',
-    'schedule': crontab(minute=0, hour=0)
+    'update_coefficient': {
+        'task': 'data.tasks.update_coefficient',
+        'schedule': crontab(minute=0, hour=0)
+    }
 }
