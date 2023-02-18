@@ -22,7 +22,7 @@ def update_coefficients():
         sess.mount("https://", HTTPAdapter(max_retries=retries))
         sess.mount("http://", HTTPAdapter(max_retries=retries))
         # response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
-        response = sess.get(settings.ANALYTIC_SYSTEM_URL)
+        response = sess.get(settings.ANALYTIC_SYSTEM_URL, timeout=1)
         obj.coefficient = response.json()['coefficient']
         obj.save(updated_fields=['coefficient'])
 
