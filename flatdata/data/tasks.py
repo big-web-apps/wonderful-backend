@@ -8,7 +8,7 @@ from .repository import ApartmentComplexRepository, FlatRepository
 from .serializers import FlatSerializer
 
 
-# @app.task
+@app.task
 def update_coefficients():
     for obj in FlatRepository.get_queryset():
         response = requests.post(settings.ANALYTIC_SYSTEM_URL, data=FlatSerializer(data=obj).data)
@@ -21,7 +21,7 @@ def get_flats_from_api(url):
     data = requests.get(url).json()
     for obj in data['data']['ITEMS']:
         if data['data'].get('IS_CORRECT', True):
-            img = requests.get(settings.BASE_FLAT_API + obj['PICTURE'])
+            img = requests.get(settings.BASE_FLAT_API + obj['PICTURE'][1:])
             with open(obj['DETAIL_PAGE_URL'][12:-1] + '.jpg', 'wb') as f:
                 f.write(img.content)
             with open(obj['DETAIL_PAGE_URL'][12:-1] + '.jpg', 'rb') as f:
@@ -42,11 +42,11 @@ def get_flats_from_api(url):
                 })
 
 
-@app.task
+# @app.task
 def get_apartment_complexes_from_api(url: str):
     data = requests.get(url).json()
     for obj in data['filters']['items']:
-        img = requests.get(settings.BASE_FLAT_API + obj['image'])
+        img = requests.get(settings.BASE_FLAT_API + obj['image'][1:])
         with open(obj['name'] + '.jpg', 'wb') as f:
             f.write(img.content)
         with open(obj['name'] + '.jpg', 'rb') as f:
