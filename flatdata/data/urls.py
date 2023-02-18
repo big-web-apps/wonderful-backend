@@ -1,10 +1,15 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .views import ApartmentComplexViewSet, FlatViewSet
+from .views import ApartmentComplexViewSet, FlatViewSet, FilteredFlatApiView, GetApiApartmentsComplexesApiView, GetApiFlatsApiView
 
 
 router = DefaultRouter()
 router.register(r'apartmentcomplexes', ApartmentComplexViewSet, 'apartmentcomplex')
 router.register(r'flats', FlatViewSet, 'flat')
-urlpatterns = router.urls
+urlpatterns = [
+    path('filteredflats/', FilteredFlatApiView.as_view()),
+    path('loadaparts/', GetApiApartmentsComplexesApiView.as_view()),
+    path('loadflats/', GetApiFlatsApiView.as_view())
+]
+urlpatterns += router.urls

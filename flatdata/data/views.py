@@ -1,11 +1,14 @@
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
-from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from .repository import ApartmentComplexRepository, FlatRepository
 from .serializers import ApartmentComplexSerializer, FlatSerializer
+from .tasks import get_apartment_complexes_from_api, get_flats_from_api
 
 # Create your views here.
 
@@ -27,8 +30,23 @@ class FlatViewSet(ModelViewSet):
 class FilteredFlatApiView(ListAPIView):
     permission_classes = (AllowAny,)
     pagination_class = LimitOffsetPagination
-    serializer_class = FlatSerializer()
+    serializer_class = FlatSerializer
 
     def get_queryset(self):
         return FlatRepository.get_filtered_queryset(self.request.query_params)
 
+
+class GetApiFlatsApiView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        get_flats_from_api(request.data['url'])
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class GetApiApartmentsComplexesApiView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        get_apartment_complexes_from_api(request.data['url'])
+        return Response(status=status.HTTP_201_CREATED)

@@ -26,23 +26,32 @@ class FlatRepository:
     @staticmethod
     def get_filtered_queryset(query_filters: Dict):
         filters = {
-            'square': [Flat.objects.aggregate(Min('square')), Flat.objects.aggregate(Max('square')) + 1],
-            'floor': [Flat.objects.aggregate(Min('floor')), Flat.objects.aggregate(Max('floor')) + 1],
-            'rooms': [Flat.objects.aggregate(Min('rooms')), Flat.objects.aggregate(Max('rooms')) + 1],
-            'districts': list(map(lambda x: x.get('district'), list(Flat.objects.values('district')))),
-            'class_type': list(map(lambda x: x.get('apartment_complex__class_type'),
-                                   list(Flat.objects.values('apartment_complex__class_type')))),
-            'price': [Flat.objects.aggregate(Min('price')), Flat.objects.aggregate(Max('price')) + 1]
+            'square': [Flat.objects.aggregate(Min('square'))['square__min'], Flat.objects.aggregate(Max('square'))['square__max'] + 1],
+            'floor': [Flat.objects.aggregate(Min('floor'))['floor__min'], Flat.objects.aggregate(Max('floor'))['floor__max'] + 1],
+            'rooms': [Flat.objects.aggregate(Min('rooms'))['rooms__min'], Flat.objects.aggregate(Max('rooms'))['rooms__max'] + 1],
+            'districts': list(map(lambda x: x.get('districts'), list(Flat.objects.values('districts').distinct().values()))),
+            'class_type': list(map(lambda x: x.get('class_type'),
+                                   list(ApartmentComplex.objects.values('class_type').distinct().values()))),
+            'price': [Flat.objects.aggregate(Min('price'))['price__min'], Flat.objects.aggregate(Max('price'))['price__max'] + 1]
         }
+        print(list(Flat.objects.values('apartment_complex__class_type').values()))
         for param in query_filters:
             filters[param] = query_filters[param]
+        print(Flat.objects.filter(
+            square__range=filters['square'],
+            floor__range=filters['floor'],
+            rooms__range=filters['rooms'],
+            price__range=filters['price'],
+            districts__in=filters['districts'],
+            apartment_complex__class_type__in=filters['class_type']
+        ))
         return Flat.objects.filter(
             square__range=filters['square'],
-            floor_range=filters['floor'],
-            rooms_range=filters['rooms'],
-            price_range=filters['price'],
-            district__in=filters['districts'],
-            apartment_complex__class_type=filters['apartment_complex__class_type']
+            floor__range=filters['floor'],
+            rooms__range=filters['rooms'],
+            price__range=filters['price'],
+            districts__in=filters['districts'],
+            apartment_complex__class_type__in=filters['class_type']
         )
 
     @staticmethod
