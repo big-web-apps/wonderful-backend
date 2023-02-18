@@ -21,7 +21,7 @@ class ApartmentComplexRepository:
 class FlatRepository:
     @staticmethod
     def get_queryset():
-        return Flat.objects.all()
+        return Flat.objects.all().order_by('-coefficient')
 
     @staticmethod
     def get_filtered_queryset(query_filters: Dict):
