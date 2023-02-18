@@ -1,5 +1,5 @@
 import requests
-
+from requests.adapters import HTTPAdapter, Retry
 from django.conf import settings
 from django.core.files import File
 
@@ -17,7 +17,12 @@ def update_coefficients():
             'floor': obj.floor,
             'price': obj.meter_price
         }
-        response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
+        sess = requests.Session()
+        retries = Retry(connect=10)
+        sess.mount("https://", HTTPAdapter(max_retries=retries))
+        sess.mount("http://", HTTPAdapter(max_retries=retries))
+        # response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
+        response = sess.get(settings.ANALYTIC_SYSTEM_URL)
         obj.coefficient = response.json()['coefficient']
         obj.save(updated_fields=['coefficient'])
 
