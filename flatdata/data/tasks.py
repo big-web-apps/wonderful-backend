@@ -9,7 +9,7 @@ from .serializers import FlatSerializer
 
 
 @app.task
-async def update_coefficients():
+def update_coefficients():
     for obj in FlatRepository.get_queryset():
         data = {
             'rooms': obj.rooms,
