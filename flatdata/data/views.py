@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from .repository import ApartmentComplexRepository, FlatRepository
 from .serializers import ApartmentComplexSerializer, FlatSerializer
-from .tasks import get_apartment_complexes_from_api, get_flats_from_api
+from .tasks import get_apartment_complexes_from_api, get_flats_from_api, update_coefficients
 
 # Create your views here.
 
@@ -55,5 +55,4 @@ class GetApiApartmentsComplexesApiView(APIView):
 class GetAllRegionsApiView(APIView):
 
     def get(self, request):
-
         return Response(FlatRepository.get_all_regions(), status=status.HTTP_200_OK)

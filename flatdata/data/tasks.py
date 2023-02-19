@@ -9,7 +9,7 @@ from .serializers import FlatSerializer
 
 
 @app.task
-def update_coefficients():
+async def update_coefficients():
     for obj in FlatRepository.get_queryset():
         data = {
             'rooms': obj.rooms,
@@ -17,14 +17,9 @@ def update_coefficients():
             'floor': obj.floor,
             'price': obj.meter_price
         }
-        sess = requests.Session()
-        retries = Retry(connect=10)
-        sess.mount("https://", HTTPAdapter(max_retries=retries))
-        sess.mount("http://", HTTPAdapter(max_retries=retries))
-        # response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
-        response = sess.get(settings.ANALYTIC_SYSTEM_URL, timeout=1)
-        obj.coefficient = response.json()['coefficient']
-        obj.save(updated_fields=['coefficient'])
+        response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data).json()
+        obj.coefficient = float(response['coefficient'])
+        obj.save()
 
 
 @app.task

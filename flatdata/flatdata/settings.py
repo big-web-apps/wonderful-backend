@@ -149,7 +149,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 12
 }
 
-ANALYTIC_SYSTEM_URL = 'http://http://95.163.237.47/'
+ANALYTIC_SYSTEM_URL = 'http://95.163.237.47/coefficient/'
 BASE_FLAT_API = 'https://ask-yug.com/'
 
 # celery and redis
