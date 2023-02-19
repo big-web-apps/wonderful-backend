@@ -46,7 +46,7 @@ class FlatRepository:
             price__range=filters['price'],
             districts__in=filters['districts'],
             apartment_complex__class_type__in=filters['class_type']
-        )
+        ).order_by('-coefficient')
 
     @staticmethod
     def insert(data: Dict):
