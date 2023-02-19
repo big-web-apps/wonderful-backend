@@ -17,8 +17,11 @@ def update_coefficients():
             'floor': obj.floor,
             'price': obj.meter_price
         }
-        response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
-        obj.coefficient = float(response.json()['coefficient'])
+        try:
+            response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
+            obj.coefficient = float(response.json()['coefficient'])
+        except Exception:
+            obj.coefficient = float('1')
         obj.save()
 
 
