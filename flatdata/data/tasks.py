@@ -17,8 +17,8 @@ async def update_coefficients():
             'floor': obj.floor,
             'price': obj.meter_price
         }
-        response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data).json()
-        obj.coefficient = float(response['coefficient'])
+        response = requests.get(settings.ANALYTIC_SYSTEM_URL, params=data)
+        obj.coefficient = float(response.json()['coefficient'])
         obj.save()
 
 
